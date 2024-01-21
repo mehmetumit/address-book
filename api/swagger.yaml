@@ -1,0 +1,473 @@
+openapi: 3.0.0
+info:
+  title: Address Book API
+  description: |-
+    Address Book API documentation based on the OpenAPI 3.0 specification
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://sandbox.api.example.com:8080/v1
+    description: Sandbox server
+  - url: http://localhost:8080/v1
+    description: |-
+      Local development server
+      Consider CORS restrictions when making requests from localhost
+tags:
+  - name: user
+    description: Person that uses app
+  - name: contact
+    description: A contact of user
+  - name: contacts of user
+    description: Contacts of user
+paths:
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create a new user
+      description: Create a new user
+      operationId: createUser
+      requestBody:
+        $ref: '#/components/requestBodies/NewUserBody'
+      responses:
+        '201':
+          description: User created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserId'
+        '400': # TODO: not clear yet
+          description: Invalid field
+        '500':
+          $ref: '#/components/responses/HTTPStatus500'
+        '503':
+          $ref: '#/components/responses/HTTPStatus503'
+  /user/{userId}/contacts:
+    parameters:
+    - $ref: '#/components/parameters/userId'
+    get:
+      tags:
+        - contacts of user
+      summary: Get contacts of user
+      description: Get contacts of user
+      operationId: getContacts
+      parameters:
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/address'
+        - $ref: '#/components/parameters/phone'
+        - $ref: '#/components/parameters/mobilePhone'
+        - $ref: '#/components/parameters/email'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactsRespModel'
+        '400':
+          description: Invalid user Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidUserId'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotFound'
+        '500':
+          $ref: '#/components/responses/HTTPStatus500'
+        '503':
+          $ref: '#/components/responses/HTTPStatus500'
+    post:
+      tags:
+        - contacts of user
+      summary: Add a new contact
+      description: Add a new contact
+      operationId: addNewContact
+      requestBody:
+        description: Add a new contact
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactReqModel'
+        required: true
+      responses:
+        '201':
+          description: Contact created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactId'
+        '400':
+          description: Invalid contact fields
+          content:
+            application/json:
+              schema:
+                anyOf: # One or more
+                  - $ref: '#/components/schemas/InvalidContactName'
+                  - $ref: '#/components/schemas/InvalidContactAddress'
+                  - $ref: '#/components/schemas/InvalidContactPhone'
+                  - $ref: '#/components/schemas/InvalidContactMobilePhone'
+                  - $ref: '#/components/schemas/InvalidContactEmail'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotFound'
+        '500':
+          $ref: '#/components/responses/HTTPStatus500'
+        '503':
+          $ref: '#/components/responses/HTTPStatus500'
+  /user/{userId}/contacts/{contactId}:
+    parameters:
+    - $ref: '#/components/parameters/userId'
+    - $ref: '#/components/parameters/contactId'
+    get:
+      tags:
+        - contact
+      summary: Get a contact of user
+      description: Get a contact of user
+      operationId: getContact
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactRespModel'
+        '400':
+          description: User and/or contact Id invalid
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/InvalidUserId'
+                  - $ref: '#/components/schemas/InvalidContactId'
+        '404':
+          description: User and/or contact not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserNotFound'
+                  - $ref: '#/components/schemas/ContactNotFound'
+        '500':
+          $ref: '#/components/responses/HTTPStatus500'
+        '503':
+          $ref: '#/components/responses/HTTPStatus503'
+    delete:
+      tags:
+        - contact
+      summary: Delete a contact of user
+      description: Delete a contact of user
+      operationId: deleteContact
+      responses:
+        '204':
+          description: Contact deleted successfully
+        '400':
+          description: User and/or contact Id invalid
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/InvalidUserId'
+                  - $ref: '#/components/schemas/InvalidContactId'
+        '404':
+          description: User and/or contact not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserNotFound'
+                  - $ref: '#/components/schemas/ContactNotFound'
+        '500':
+          $ref: '#/components/responses/HTTPStatus500'
+        '503':
+          $ref: '#/components/responses/HTTPStatus503'
+    put:
+      tags:
+        - contact
+      summary: Update a contact of user
+      description: Update a contact of user
+      operationId: updateContact
+      requestBody:
+        description: Update a contact of user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactReqModel'
+        required: true
+      responses:
+        '204':
+          description: Contact updated successfully
+        '400':
+          description: Invalid contact fields
+          content:
+            application/json:
+              schema:
+                anyOf: # One or more
+                  - $ref: '#/components/schemas/InvalidContactName'
+                  - $ref: '#/components/schemas/InvalidContactAddress'
+                  - $ref: '#/components/schemas/InvalidContactPhone'
+                  - $ref: '#/components/schemas/InvalidContactMobilePhone'
+                  - $ref: '#/components/schemas/InvalidContactEmail'
+        '404':
+          description: User and/or contact not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserNotFound'
+                  - $ref: '#/components/schemas/ContactNotFound'
+        '500':
+          $ref: '#/components/responses/HTTPStatus500'
+        '503':
+          $ref: '#/components/responses/HTTPStatus503'
+components:
+  schemas:
+    Error:
+      description: Error response data model
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      example:
+        code: 503
+        message: Database unavailable
+      required:
+        - code
+        - message
+    NewUser: # TODO: not clear yet
+      description: User data model that contains user information
+      type: object
+      properties:
+        token:
+          type: string
+      example:
+        token: dummy-token
+      required:
+        - token
+    UserId:
+      description: Id data model of user
+      type: string
+      format: uuid
+      example: e2527518-033c-49e2-a630-5f4a9af16ebc
+    ContactId:
+      description: Id data model of contact
+      type: string
+      format: uuid
+      example: abc12345-122a-2211-bc12-123123abcef3
+    Name:
+      description: Name data of contact
+      type: string
+      example: Brian Kernighan
+    Phone:
+      description: |-
+        Phone data of contact
+        Length must be between 1 and 15 digits according to E.164
+      type: string
+      minLength: 1
+      maxLength: 15
+      example: '+15551114443'
+    Email:
+      description: Email data of contact
+      type: string
+      format: email
+      example: example@example.com
+    Address:
+      description: Address data of contact
+      type: string
+      example: Ankara, Turkey
+    Contact:
+      description: |-
+        Contact data model that contains contact information
+        Name, address, and phone fields are required
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        address:
+          $ref: '#/components/schemas/Address'
+        phone:
+          $ref: '#/components/schemas/Phone'
+        email:
+          $ref: '#/components/schemas/Email'
+        mobilePhone:
+          $ref: '#/components/schemas/Phone'
+      example:
+        name: Tim Cook
+        address: Los Angeles, CA
+        phone: '+385957507783'
+        email: tcook@apple.com
+        mobilePhone: '+14089740100'
+      required:
+        - name
+        - address
+        - phone
+    ContactRespModel:
+      description: Contact response data model that contains contact information and contact Id
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+          example:
+            id: e2527518-033c-49e2-a630-5f4a9af16ebc
+          required:
+            - id
+        - $ref: '#/components/schemas/Contact'
+    ContactReqModel:
+      description: Contact request data model that contains contact information
+      allOf:
+        - $ref: '#/components/schemas/Contact'
+        # - type: object -> Add extra properties here
+    ContactsRespModel:
+      description: Contacts response that the user has
+      type: array
+      items:
+        $ref: '#/components/schemas/ContactRespModel'
+    ContactNotFound:
+      description: Contact not found
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 404
+        message: Contact not found
+    UserNotFound:
+      description: User not found
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 404
+        message: User not found
+    InvalidUserId:
+      description: Invalid user Id
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 400
+        message: Invalid user Id
+    InvalidContactId:
+      description: Invalid contact Id
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 400
+        message: Invalid contact Id
+    InvalidContactName:
+      description: Invalid contact name
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 400
+        message: Invalid contact name
+    InvalidContactEmail:
+      description: Invalid contact name
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 400
+        message: Invalid contact name
+    InvalidContactAddress:
+      description: Invalid contact address
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 400
+        message: Invalid contact address
+    InvalidContactPhone:
+      description: Invalid contact phone
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 400
+        message: Invalid contact phone
+    InvalidContactMobilePhone:
+      description: Invalid contact mobile phone
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 400
+        message: Invalid contact mobile phone
+  requestBodies:
+    NewUserBody:
+      description: A JSON object that contains new user information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewUser'
+  responses:
+    HTTPStatus500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal server error
+
+    HTTPStatus503:
+      description: Database unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            dbUnavailable:
+              value:
+                code: 503
+                message: Database unavailable
+  parameters:
+    userId:
+      description: User Id as path parameter
+      required: true
+      in: path
+      name: userId
+      schema:
+        $ref: '#/components/schemas/UserId'
+    contactId:
+      description: Contact Id as path parameter
+      required: true
+      in: path
+      name: contactId
+      schema:
+        $ref: '#/components/schemas/ContactId'
+    name:
+      description: Name as query parameter
+      in: query
+      name: name
+      schema:
+        $ref: '#/components/schemas/Name'
+    address:
+      description: Address as query parameter
+      in: query
+      name: address
+      schema:
+        $ref: '#/components/schemas/Address'
+    phone:
+      description: Phone as query parameter
+      in: query
+      name: phone
+      schema:
+        $ref: '#/components/schemas/Phone'
+    mobilePhone:
+      description: Mobile phone as query parameter
+      in: query
+      name: mobilePhone
+      schema:
+        $ref: '#/components/schemas/Phone'
+    email:
+      description: Email as query parameter
+      in: query
+      name: email
+      schema:
+        $ref: '#/components/schemas/Email'

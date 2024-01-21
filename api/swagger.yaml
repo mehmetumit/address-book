@@ -264,8 +264,12 @@ components:
       format: uuid
       example: abc12345-122a-2211-bc12-123123abcef3
     Name:
-      description: Name data of contact
+      description: |-
+        Full name data of contact
+        Length must be between 1 and 50
       type: string
+      minLength: 1
+      maxLength: 50
       example: Brian Kernighan
     Phone:
       description: |-
@@ -283,6 +287,8 @@ components:
     Address:
       description: Address data of contact
       type: string
+      minLength: 1
+      maxLength: 255
       example: Ankara, Turkey
     Contact:
       description: |-

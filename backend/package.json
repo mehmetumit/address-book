@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+   "start": "nodemon app.js -e js,ejs,json,css,html,jpg,png",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,7 @@
   "devDependencies": {
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "nodemon": "^3.0.3",
     "prettier": "^3.2.4"
   }
 }

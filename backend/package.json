@@ -1,0 +1,27 @@
+{
+  "name": "address-book-backend",
+  "version": "1.0.0",
+  "description": "Address book backend",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mehmetumit/address-book.git"
+  },
+  "author": "Mehmet Ümit Özden",
+  "bugs": {
+    "url": "https://github.com/mehmetumit/address-book/issues"
+  },
+  "homepage": "https://github.com/mehmetumit/address-book#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.4"
+  }
+}

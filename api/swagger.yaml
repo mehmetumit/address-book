@@ -9,48 +9,22 @@ servers:
     description: Production server
   - url: https://staging.api.example.com:8080/v1
     description: Staging server
-  - url: http://localhost:8080/v1
+  - url: http://localhost:3000/v1
     description: |-
       Local development server
       Consider CORS restrictions when making requests from localhost
 tags:
-  - name: user
-    description: Person that uses app
   - name: contact
     description: A contact of user
   - name: contacts of user
     description: Contacts of user
 paths:
-  /user:
-    post:
-      tags:
-        - user
-      summary: Create a new user
-      description: Create a new user
-      operationId: createUser
-      requestBody:
-        $ref: '#/components/requestBodies/NewUserBody'
-      responses:
-        '201':
-          description: User created succesfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserId'
-        '400': # TODO: not clear yet
-          description: Invalid field
-        '500':
-          $ref: '#/components/responses/HTTPStatus500'
-        '503':
-          $ref: '#/components/responses/HTTPStatus503'
-  /user/{userId}/contacts:
-    parameters:
-    - $ref: '#/components/parameters/userId'
+  /contacts:
     get:
       tags:
         - contacts of user
       summary: Get contacts of user
-      description: Get contacts of user
+      description: Get contacts of user with given query parameters
       operationId: getContacts
       parameters:
         - $ref: '#/components/parameters/name'
@@ -60,23 +34,11 @@ paths:
         - $ref: '#/components/parameters/email'
       responses:
         '200':
-          description: Successful operation
+          description: Returns contacts
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContactsRespModel'
-        '400':
-          description: Invalid user Id
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InvalidUserId'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserNotFound'
         '500':
           $ref: '#/components/responses/HTTPStatus500'
         '503':
@@ -85,10 +47,10 @@ paths:
       tags:
         - contacts of user
       summary: Add a new contact
-      description: Add a new contact
+      description: Add a new contact by giving contact informations
       operationId: addNewContact
       requestBody:
-        description: Add a new contact
+        description: Body data that includes contact informations
         content:
           application/json:
             schema:
@@ -96,13 +58,13 @@ paths:
         required: true
       responses:
         '201':
-          description: Contact created successfully
+          description: Contact created successfully, returns the contact Id
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContactId'
         '400':
-          description: Invalid contact fields
+          description: Invalid contact fields, returns invalid fields
           content:
             application/json:
               schema:
@@ -112,49 +74,38 @@ paths:
                   - $ref: '#/components/schemas/InvalidContactPhone'
                   - $ref: '#/components/schemas/InvalidContactMobilePhone'
                   - $ref: '#/components/schemas/InvalidContactEmail'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserNotFound'
         '500':
           $ref: '#/components/responses/HTTPStatus500'
         '503':
           $ref: '#/components/responses/HTTPStatus500'
-  /user/{userId}/contacts/{contactId}:
+  /contacts/{contactId}:
     parameters:
-    - $ref: '#/components/parameters/userId'
     - $ref: '#/components/parameters/contactId'
     get:
       tags:
         - contact
       summary: Get a contact of user
-      description: Get a contact of user
+      description: Get a contact of user by contact Id
       operationId: getContact
       responses:
         '200':
-          description: Successful operation
+          description: Returns a contact response model data
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContactRespModel'
         '400':
-          description: User and/or contact Id invalid
+          description: Contact Id invalid
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/InvalidUserId'
-                  - $ref: '#/components/schemas/InvalidContactId'
+                $ref: '#/components/schemas/InvalidContactId'
         '404':
-          description: User and/or contact not found
+          description: Contact not found
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/UserNotFound'
-                  - $ref: '#/components/schemas/ContactNotFound'
+                $ref: '#/components/schemas/ContactNotFound'
         '500':
           $ref: '#/components/responses/HTTPStatus500'
         '503':
@@ -163,27 +114,23 @@ paths:
       tags:
         - contact
       summary: Delete a contact of user
-      description: Delete a contact of user
+      description: Delete a contact of user by contact Id
       operationId: deleteContact
       responses:
         '204':
           description: Contact deleted successfully
         '400':
-          description: User and/or contact Id invalid
+          description: Contact Id invalid
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/InvalidUserId'
-                  - $ref: '#/components/schemas/InvalidContactId'
+                $ref: '#/components/schemas/InvalidContactId'
         '404':
-          description: User and/or contact not found
+          description: Contact not found
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/UserNotFound'
-                  - $ref: '#/components/schemas/ContactNotFound'
+                $ref: '#/components/schemas/ContactNotFound'
         '500':
           $ref: '#/components/responses/HTTPStatus500'
         '503':
@@ -192,10 +139,10 @@ paths:
       tags:
         - contact
       summary: Update a contact of user
-      description: Update a contact of user
+      description: Update a contact of user by contact Id
       operationId: updateContact
       requestBody:
-        description: Update a contact of user
+        description: Body data that includes contact informations
         content:
           application/json:
             schema:
@@ -205,7 +152,7 @@ paths:
         '204':
           description: Contact updated successfully
         '400':
-          description: Invalid contact fields
+          description: Invalid contact fields, returns invalid fields
           content:
             application/json:
               schema:
@@ -216,13 +163,11 @@ paths:
                   - $ref: '#/components/schemas/InvalidContactMobilePhone'
                   - $ref: '#/components/schemas/InvalidContactEmail'
         '404':
-          description: User and/or contact not found
+          description: Contact not found
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/UserNotFound'
-                  - $ref: '#/components/schemas/ContactNotFound'
+                $ref: '#/components/schemas/ContactNotFound'
         '500':
           $ref: '#/components/responses/HTTPStatus500'
         '503':
@@ -243,21 +188,6 @@ components:
       required:
         - code
         - message
-    NewUser: # TODO: not clear yet
-      description: User data model that contains user information
-      type: object
-      properties:
-        token:
-          type: string
-      example:
-        token: dummy-token
-      required:
-        - token
-    UserId:
-      description: Id data model of user
-      type: string
-      format: uuid
-      example: e2527518-033c-49e2-a630-5f4a9af16ebc
     ContactId:
       description: Id data model of contact
       type: string
@@ -346,20 +276,6 @@ components:
       example:
         code: 404
         message: Contact not found
-    UserNotFound:
-      description: User not found
-      allOf:
-      - $ref: '#/components/schemas/Error'
-      example:
-        code: 404
-        message: User not found
-    InvalidUserId:
-      description: Invalid user Id
-      allOf:
-      - $ref: '#/components/schemas/Error'
-      example:
-        code: 400
-        message: Invalid user Id
     InvalidContactId:
       description: Invalid contact Id
       allOf:
@@ -375,7 +291,7 @@ components:
         code: 400
         message: Invalid contact name
     InvalidContactEmail:
-      description: Invalid contact name
+      description: Invalid contact email
       allOf:
       - $ref: '#/components/schemas/Error'
       example:
@@ -402,14 +318,6 @@ components:
       example:
         code: 400
         message: Invalid contact mobile phone
-  requestBodies:
-    NewUserBody:
-      description: A JSON object that contains new user information
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NewUser'
   responses:
     HTTPStatus500:
       description: Internal server error
@@ -433,13 +341,6 @@ components:
                 code: 503
                 message: Database unavailable
   parameters:
-    userId:
-      description: User Id as path parameter
-      required: true
-      in: path
-      name: userId
-      schema:
-        $ref: '#/components/schemas/UserId'
     contactId:
       description: Contact Id as path parameter
       required: true

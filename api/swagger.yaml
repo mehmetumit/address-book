@@ -69,6 +69,7 @@ paths:
             application/json:
               schema:
                 anyOf: # One or more
+                  - $ref: '#/components/schemas/ContactNameExists'
                   - $ref: '#/components/schemas/InvalidContactName'
                   - $ref: '#/components/schemas/InvalidContactAddress'
                   - $ref: '#/components/schemas/InvalidContactPhone'
@@ -157,6 +158,7 @@ paths:
             application/json:
               schema:
                 anyOf: # One or more
+                  - $ref: '#/components/schemas/ContactNameExists'
                   - $ref: '#/components/schemas/InvalidContactName'
                   - $ref: '#/components/schemas/InvalidContactAddress'
                   - $ref: '#/components/schemas/InvalidContactPhone'
@@ -197,6 +199,7 @@ components:
       description: |-
         Full name data of contact
         Length must be between 1 and 50
+        Must be unique for each contact
       type: string
       minLength: 1
       maxLength: 50
@@ -224,6 +227,7 @@ components:
       description: |-
         Contact data model that contains contact information
         Name, address, and phone fields are required
+        Name must be unique for each contact
       type: object
       properties:
         name:
@@ -290,6 +294,13 @@ components:
       example:
         code: 400
         message: Invalid contact name
+    ContactNameExists:
+      description: Contact name exists
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      example:
+        code: 400
+        message: Contact name exists
     InvalidContactEmail:
       description: Invalid contact email
       allOf:

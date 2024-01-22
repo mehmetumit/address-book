@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-   "start": "nodemon app.js -e js,ejs,json,css,html,jpg,png",
+   "live-reload": "nodemon app.js -e js,ejs,json,css,html,jpg,png",
+    "init-env": "./scripts/init_env.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

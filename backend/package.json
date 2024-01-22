@@ -28,10 +28,12 @@
     "yaml": "^2.3.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
     "chai": "^5.0.0",
     "chai-http": "^4.4.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "express-openapi-validate": "^0.6.1",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.3",
     "nyc": "^15.1.0",

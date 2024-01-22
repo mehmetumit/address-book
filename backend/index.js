@@ -1,9 +1,15 @@
 import express from 'express';
 import process from 'process';
 import promBundle from 'express-prom-bundle';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs'
+import YAML from 'yaml'
 
 const app = express();
+const router = express.Router()
 const port = 3000;
+const file = fs.readFileSync('../api/swagger.yaml', 'utf8')
+const swaggerDoc = YAML.parse(file)
 const promMiddleware = promBundle({
     includeUp: true,
     includeMethod: true,
@@ -19,8 +25,10 @@ const promMiddleware = promBundle({
 });
 
 app.use(promMiddleware);
+app.use('/v1', router)
+router.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
     res.json({
         'GET /metrics': 'get metrics data',
     });

@@ -2,27 +2,24 @@ openapi: 3.0.0
 info:
   title: Address Book API
   description: |-
-    Address Book API documentation based on the OpenAPI 3.0 specification
+    Address Book API documentation based on the OpenAPI 3.0 specification.
+    Consider CORS restrictions when making requests to other hosts.
   version: 1.0.0
 servers:
+  - url: http://localhost:3000/v1
+    description: Local development server
   - url: https://api.example.com/v1
     description: Production server
-  - url: https://staging.api.example.com:8080/v1
+  - url: https://staging.api.example.com/v1
     description: Staging server
-  - url: http://localhost:3000/v1
-    description: |-
-      Local development server
-      Consider CORS restrictions when making requests from localhost
 tags:
-  - name: contact
-    description: A contact of user
-  - name: contacts of user
-    description: Contacts of user
+  - name: contacts
+    description: Operations about contacts of user
 paths:
   /contacts:
     get:
       tags:
-        - contacts of user
+        - contacts
       summary: Get contacts of user
       description: Get contacts of user with given query parameters
       operationId: getContacts
@@ -45,7 +42,7 @@ paths:
           $ref: '#/components/responses/HTTPStatus500'
     post:
       tags:
-        - contacts of user
+        - contacts
       summary: Add a new contact
       description: Add a new contact by giving contact informations
       operationId: addNewContact
@@ -84,7 +81,7 @@ paths:
     - $ref: '#/components/parameters/contactId'
     get:
       tags:
-        - contact
+        - contacts
       summary: Get a contact of user
       description: Get a contact of user by contact Id
       operationId: getContact
@@ -113,7 +110,7 @@ paths:
           $ref: '#/components/responses/HTTPStatus503'
     delete:
       tags:
-        - contact
+        - contacts
       summary: Delete a contact of user
       description: Delete a contact of user by contact Id
       operationId: deleteContact
@@ -138,7 +135,7 @@ paths:
           $ref: '#/components/responses/HTTPStatus503'
     put:
       tags:
-        - contact
+        - contacts
       summary: Update a contact of user
       description: Update a contact of user by contact Id
       operationId: updateContact

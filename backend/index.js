@@ -9,6 +9,13 @@ const promMiddleware = promBundle({
     includeMethod: true,
     includePath: true,
     includeStatusCode: true,
+    customLabels: {
+        project_name: 'address_book_backend',
+        project_type: 'test_metrics_labels',
+    },
+    promClient: {
+        collectDefaultMetrics: {},
+    },
 });
 
 app.use(promMiddleware);

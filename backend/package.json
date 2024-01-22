@@ -7,7 +7,8 @@
   "scripts": {
     "live-reload": "export NODE_ENV=development && nodemon index.js -e js,ejs,json,yaml,yml,css,html,jpg,png",
     "init-env": "./scripts/init_env.sh",
-    "test": "export NODE_ENV=test && mocha --recursive"
+    "test": "export NODE_ENV=test && mocha --recursive --exit",
+    "coverage": "nyc --reporter=text --reporter=lcov npm run test"
   },
   "repository": {
     "type": "git",
@@ -27,9 +28,13 @@
     "yaml": "^2.3.4"
   },
   "devDependencies": {
+    "chai": "^5.0.0",
+    "chai-http": "^4.4.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "mocha": "^10.2.0",
     "nodemon": "^3.0.3",
+    "nyc": "^15.1.0",
     "prettier": "^3.2.4"
   }
 }

@@ -11,6 +11,8 @@ COPY . .
 
 FROM alpine:latest as final
 
+# Really small image size with --no-cache option and
+# by installing only necessary packages
 RUN apk --no-cache add nodejs ca-certificates
 
 WORKDIR /usr/src/app

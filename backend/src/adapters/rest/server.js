@@ -4,6 +4,7 @@ import SwaggerMiddleware from './middlewares/swaggerMiddleware.js';
 import PromMiddleware from './middlewares/promMiddleware.js';
 import LoggerMiddleware from './middlewares/loggerMiddleware.js';
 import SignalHandler from '../../util/signalHandler.js';
+import HelpRouter from './routes/helpRouter.js';
 
 const Server = ({ serverConfig, logger }) => {
     const app = express();
@@ -35,11 +36,7 @@ const Server = ({ serverConfig, logger }) => {
         serve() {
             app.use(express.json());
             app.use('/v1', router);
-            router.get('/', (req, res) => {
-                res.json({
-                    'GET /metrics': 'get metrics data',
-                });
-            });
+            router.use('/', HelpRouter());
             server = app.listen(port, () => {
                 console.log(`Example app listening on port ${port}`);
             });

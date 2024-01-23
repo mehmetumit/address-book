@@ -15,7 +15,23 @@ servers:
 tags:
   - name: contacts
     description: Operations about contacts of user
+  - name: help
+    description: Get help informaton to discover API
 paths:
+  /:
+    get:
+      tags:
+        - help
+      summary: Get help information
+      description: Get help information to discover API
+      operationId: getHelp
+      responses:
+        '200':
+          description: Returns help result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelpRespModel'
   /contacts:
     get:
       tags:
@@ -326,6 +342,14 @@ components:
       example:
         code: 400
         message: Invalid contact mobile phone
+    HelpRespModel:
+      description: Help response data model
+      type: object
+      additionalProperties:
+        type: string
+      example:
+        /metrics: get metrics data
+        doc/: get api doc
   responses:
     HTTPStatus500:
       description: Internal server error

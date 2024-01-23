@@ -2,14 +2,22 @@ import express from 'express';
 import process from 'process';
 import promBundle from 'express-prom-bundle';
 import swaggerUi from 'swagger-ui-express';
-import fs from 'fs'
-import YAML from 'yaml'
+import YamlParser from './util/yamlParser.js';
+import Logger from './adapters/logger/logger.js';
 
 const app = express();
-const router = express.Router()
+const router = express.Router();
 const port = 3000;
-const file = fs.readFileSync('../api/swagger.yaml', 'utf8')
-const swaggerDoc = YAML.parse(file)
+const logger = Logger();
+logger.initLogger({
+    outputTransports: logger.consoleTransport(),
+    format: logger.prettyFormat(),
+    level: logger.debugLevel(),
+});
+logger.info('Hello info')
+logger.debug('Hello debug')
+logger.error('Hello error')
+const swaggerDoc = YamlParser(logger).parse('../api/swagger.yaml');
 const promMiddleware = promBundle({
     includeUp: true,
     includeMethod: true,
@@ -25,7 +33,7 @@ const promMiddleware = promBundle({
 });
 
 app.use(promMiddleware);
-app.use('/v1', router)
+app.use('/v1', router);
 router.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 router.get('/', (req, res) => {

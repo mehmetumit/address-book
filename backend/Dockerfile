@@ -19,4 +19,4 @@ WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app ./
 
-CMD [ "node", "index.js" ]
+CMD [ "node", "./src/index.js" ]

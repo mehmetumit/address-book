@@ -8,7 +8,8 @@
     "live-reload": "export NODE_ENV=development && nodemon ./src/index.js -e js,ejs,json,yaml,yml,css,html,jpg,png",
     "init-env": "./scripts/init_env.sh",
     "test": "export NODE_ENV=test && mocha --recursive --exit",
-    "coverage": "nyc --reporter=text --reporter=lcov npm run test"
+    "test:coverage": "c8 --reporter=text --reporter=lcov npm run test",
+    "lint": "eslint . "
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "dotenv-flow": "^4.1.0",
     "express": "^4.18.2",
     "express-prom-bundle": "^7.0.0",
+    "joi": "^17.12.0",
     "prom-client": "^15.1.0",
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.11.0",

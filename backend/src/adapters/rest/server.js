@@ -9,7 +9,8 @@ const Server = ({ serverConfig, logger }) => {
     const app = express();
     const router = express.Router();
     const port = serverConfig.port;
-    () => {};
+    const shutdownTimeout = serverConfig.shutdownTimout;
+    let server;
     return {
         // Recommended to use on top of middleware chain
         withProm(promConfig) {
@@ -32,16 +33,28 @@ const Server = ({ serverConfig, logger }) => {
             return this;
         },
         serve() {
+            app.use(express.json());
             app.use('/v1', router);
             router.get('/', (req, res) => {
                 res.json({
                     'GET /metrics': 'get metrics data',
                 });
             });
-            app.listen(port, () => {
+            server = app.listen(port, () => {
                 console.log(`Example app listening on port ${port}`);
             });
-            SignalHandler(logger).listenINT().listenQUIT().listenTERM();
+            SignalHandler({
+                logger: logger,
+                timeoutSecond: shutdownTimeout,
+                shutdownCallback: this.shutDown,
+            })
+                .listenINT()
+                .listenQUIT()
+                .listenTERM();
+        },
+        shutDown() {
+            server.close();
+            logger.info('Server shutdown successfully');
         },
     };
 };

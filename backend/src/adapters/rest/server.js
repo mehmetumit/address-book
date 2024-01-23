@@ -34,7 +34,7 @@ const Server = ({ serverConfig, logger }) => {
             app.listen(port, () => {
                 console.log(`Example app listening on port ${port}`);
             });
-            SignalHandler().listenINT().listenQUIT().listenTERM();
+            SignalHandler(logger).listenINT().listenQUIT().listenTERM();
         },
     };
 };

@@ -14,4 +14,8 @@ const server = Server({
     serverConfig: ServerConfig,
     logger: logger,
 });
-server.withProm(PromConfig).withSwaggerUI('../api/swagger.yaml').serve();
+server
+    .withProm(PromConfig)
+    .withLoggerMiddleware()
+    .withSwaggerUI('../api/swagger.yaml')
+    .serve();

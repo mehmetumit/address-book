@@ -2,6 +2,7 @@ import express from 'express';
 import YamlParser from '../../util/yamlParser.js';
 import SwaggerMiddleware from './middlewares/swaggerMiddleware.js';
 import PromMiddleware from './middlewares/promMiddleware.js';
+import LoggerMiddleware from './middlewares/loggerMiddleware.js';
 import SignalHandler from '../../util/signalHandler.js';
 
 const Server = ({ serverConfig, logger }) => {
@@ -22,6 +23,12 @@ const Server = ({ serverConfig, logger }) => {
             } catch (err) {
                 logger.error('Swagger middleware disabled');
             }
+            return this;
+        },
+        withLoggerMiddleware() {
+            router.use(
+                LoggerMiddleware({ logger: logger, disabledPaths: ['/doc/'] })
+            );
             return this;
         },
         serve() {

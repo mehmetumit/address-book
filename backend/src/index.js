@@ -2,12 +2,19 @@ import Logger from './adapters/logger/logger.js';
 import Server from './adapters/rest/server.js';
 import ServerConfig from './configs/serverConfig.js';
 import PromConfig from './configs/promConfig.js';
+import SwaggerConfig from './configs/swaggerConfig.js';
 
 const logger = Logger();
 logger.initLogger({
     outputTransports: logger.consoleTransport(),
-    format: logger.prettyFormat(),
-    level: logger.debugLevel(),
+    format:
+        process.env.NODE_ENV == 'production'
+            ? logger.jsonFormat()
+            : logger.prettyFormat(),
+    level:
+        process.env.NODE_ENV == 'production'
+            ? logger.productionLevel()
+            : logger.debugLevel(),
 });
 
 const server = Server({
@@ -17,5 +24,5 @@ const server = Server({
 server
     .withProm(PromConfig)
     .withLoggerMiddleware()
-    .withSwaggerUI('../api/swagger.yaml')
+    .withSwaggerUI(SwaggerConfig)
     .serve();

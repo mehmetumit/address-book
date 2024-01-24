@@ -18,9 +18,9 @@ const Server = ({ serverConfig, logger }) => {
             app.use(PromMiddleware(promConfig));
             return this;
         },
-        withSwaggerUI(filePath) {
+        withSwaggerUI(swaggerConfig) {
             try {
-                const swaggerDoc = YamlParser(logger).parse(filePath);
+                const swaggerDoc = YamlParser(logger).parse(swaggerConfig.filePath);
                 router.use('/doc', SwaggerMiddleware(swaggerDoc));
             } catch (err) {
                 logger.error('Swagger middleware disabled');
@@ -38,7 +38,7 @@ const Server = ({ serverConfig, logger }) => {
             app.use('/v1', router);
             router.use('/', HelpRouter());
             server = app.listen(port, () => {
-                console.log(`Example app listening on port ${port}`);
+                logger.info(`Listening on port ${port}`);
             });
             SignalHandler({
                 logger: logger,

@@ -1,5 +1,8 @@
+import DotenvFlow from 'dotenv-flow';
+DotenvFlow.config();
+
 const ServerConfig = {
-    port: 3000,
-    shutdownTimeout: 10
+    port: process.env.HTTP_PORT,
+    shutdownTimeout: process.env.SHUTDOWN_TIMEOUT,
 };
 export default ServerConfig;

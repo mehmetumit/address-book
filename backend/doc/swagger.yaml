@@ -57,7 +57,7 @@ paths:
         '500':
           $ref: '#/components/responses/HTTPStatus500'
         '503':
-          $ref: '#/components/responses/HTTPStatus500'
+          $ref: '#/components/responses/HTTPStatus503'
     post:
       tags:
         - contacts
@@ -93,7 +93,7 @@ paths:
         '500':
           $ref: '#/components/responses/HTTPStatus500'
         '503':
-          $ref: '#/components/responses/HTTPStatus500'
+          $ref: '#/components/responses/HTTPStatus503'
   /contacts/{contactId}:
     parameters:
     - $ref: '#/components/parameters/contactId'

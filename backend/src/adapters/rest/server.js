@@ -6,6 +6,7 @@ import LoggerMiddleware from './middlewares/loggerMiddleware.js';
 import SignalHandler from '../../util/signalHandler.js';
 import HelpRouter from './routes/helpRouter.js';
 import cors from 'cors'
+import ContactRouter from './routes/contactRouter.js';
 
 const Server = ({ serverConfig, logger }) => {
     const app = express();
@@ -42,6 +43,7 @@ const Server = ({ serverConfig, logger }) => {
             app.use(express.json());
             app.use('/api/v1', router);
             router.use('/', HelpRouter());
+            router.use('/contacts', ContactRouter(logger));
             server = app.listen(port, () => {
                 logger.info(`Listening on port ${port}`);
             });

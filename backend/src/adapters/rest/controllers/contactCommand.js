@@ -1,12 +1,9 @@
-import CreateContact from '../../../core/app/command/createContact.js';
-import DeleteContact from '../../../core/app/command/deleteContact.js';
-import UpdateContact from '../../../core/app/command/updateContact.js';
 import ContactIdModel from '../models/contactIdModel.js';
 import ErrorController from './errorController.js';
-const ContactCommandController = (logger) => {
+const ContactCommandController = ({ logger, appCommand }) => {
     return {
         async createContact(req, res, next) {
-            const createContact = CreateContact();
+            const createContact = appCommand.CreateContact();
             res.setHeader('Content-Type', 'application/json');
             try {
                 const contactId = await createContact.createNewContact(
@@ -20,13 +17,12 @@ const ContactCommandController = (logger) => {
             }
         },
         async updateContactById(req, res, next) {
-            const updateContact = UpdateContact();
+            const updateContact = appCommand.UpdateContact();
             try {
                 await updateContact.updateContactById({
                     id: req.params.id,
                     contactData: req.body,
                 });
-
                 res.status(204);
             } catch (err) {
                 res.setHeader('Content-Type', 'application/json');
@@ -36,7 +32,7 @@ const ContactCommandController = (logger) => {
             }
         },
         async deleteContactById(req, res, next) {
-            const deleteContact = DeleteContact();
+            const deleteContact = appCommand.DeleteContact();
             try {
                 await deleteContact.deleteContactById(req.params.id);
 

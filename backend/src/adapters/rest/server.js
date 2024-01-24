@@ -5,10 +5,10 @@ import PromMiddleware from './middlewares/promMiddleware.js';
 import LoggerMiddleware from './middlewares/loggerMiddleware.js';
 import SignalHandler from '../../util/signalHandler.js';
 import HelpRouter from './routes/helpRouter.js';
-import cors from 'cors'
+import cors from 'cors';
 import ContactRouter from './routes/contactRouter.js';
 
-const Server = ({ serverConfig, logger }) => {
+const Server = ({ serverConfig, logger, appCommand, appQuery }) => {
     const app = express();
     const router = express.Router();
     const port = serverConfig.port;
@@ -26,7 +26,9 @@ const Server = ({ serverConfig, logger }) => {
         },
         withSwaggerUI(swaggerConfig) {
             try {
-                const swaggerDoc = YamlParser(logger).parse(swaggerConfig.filePath);
+                const swaggerDoc = YamlParser(logger).parse(
+                    swaggerConfig.filePath
+                );
                 router.use('/doc', SwaggerMiddleware(swaggerDoc));
             } catch (err) {
                 logger.error('Swagger middleware disabled');
@@ -43,7 +45,14 @@ const Server = ({ serverConfig, logger }) => {
             app.use(express.json());
             app.use('/api/v1', router);
             router.use('/', HelpRouter());
-            router.use('/contacts', ContactRouter(logger));
+            router.use(
+                '/contacts',
+                ContactRouter({
+                    logger: logger,
+                    appCommand: appCommand,
+                    appQuery: appQuery,
+                })
+            );
             server = app.listen(port, () => {
                 logger.info(`Listening on port ${port}`);
             });

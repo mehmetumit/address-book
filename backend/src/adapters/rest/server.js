@@ -5,6 +5,7 @@ import PromMiddleware from './middlewares/promMiddleware.js';
 import LoggerMiddleware from './middlewares/loggerMiddleware.js';
 import SignalHandler from '../../util/signalHandler.js';
 import HelpRouter from './routes/helpRouter.js';
+import cors from 'cors'
 
 const Server = ({ serverConfig, logger }) => {
     const app = express();
@@ -16,6 +17,10 @@ const Server = ({ serverConfig, logger }) => {
         // Recommended to use on top of middleware chain
         withProm(promConfig) {
             app.use(PromMiddleware(promConfig));
+            return this;
+        },
+        withCors() {
+            app.use(cors());
             return this;
         },
         withSwaggerUI(swaggerConfig) {
@@ -35,7 +40,7 @@ const Server = ({ serverConfig, logger }) => {
         },
         serve() {
             app.use(express.json());
-            app.use('/v1', router);
+            app.use('/api/v1', router);
             router.use('/', HelpRouter());
             server = app.listen(port, () => {
                 logger.info(`Listening on port ${port}`);

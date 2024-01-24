@@ -22,6 +22,7 @@ const server = Server({
     logger: logger,
 });
 server
+    .withCors()
     .withProm(PromConfig)
     .withLoggerMiddleware()
     .withSwaggerUI(SwaggerConfig)

@@ -5,7 +5,7 @@ datasources:
     type: prometheus
     access: proxy
     orgId: 1
-    url: http://host.docker.internal:9090
+    url: http://prometheus-collector:9090/prometheus
     basicAuth: false
     isDefault: true
     editable: true

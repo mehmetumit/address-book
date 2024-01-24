@@ -6,11 +6,13 @@ info:
     Consider CORS restrictions when making requests to other hosts.
   version: 1.0.0
 servers:
-  - url: http://localhost:3000/v1
+  - url: http://localhost:3000/api/v1
     description: Local development server
-  - url: https://api.example.com/v1
+  - url: http://localhost/api/v1
+    description: Local test server
+  - url: https://example.com/api/v1
     description: Production server
-  - url: https://staging.api.example.com/v1
+  - url: https://staging.example.com/api/v1
     description: Staging server
 tags:
   - name: contacts

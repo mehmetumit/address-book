@@ -1,0 +1,49 @@
+services:
+  address-book-backend:
+    hostname: address-book-backend
+    image: app/address-book-backend
+    container_name: address-book-backend
+    environment:
+      NODE_ENV: production
+    expose:
+      - 3000
+  address-book-frontend:
+    image: app/address-book-frontend
+    container_name: address-book-frontend
+  nginx:
+    hostname: nginx
+    container_name: nginx
+    build:
+      context: ./nginx
+    depends_on:
+      - address-book-frontend
+    ports:
+      - 80:80
+      - 443:443
+  prometheus-collector:
+    image: prom/prometheus
+    hostname: prometheus-collector
+    container_name: prometheus-collector
+    expose:
+      - 9090
+    volumes:
+      - ./prometheus/prometheus.yml:/prometheus/prometheus.yml
+      # - prometheus_data:/prometheus -> might be useful
+    command:
+      # We need to set sub path if we use it behind a proxy
+      - --web.external-url=http://localhost:9090/prometheus/
+  grafana:
+    image: grafana/grafana
+    hostname: grafana
+    container_name: grafana
+    environment:
+      GF_AUTH_DISABLE_LOGIN_FORM: true
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      # We need to set sub path if we use it behind a proxy
+      GF_SERVER_ROOT_URL: '%(protocol)s://%(domain)s:%(http_port)s/grafana'
+      GF_SERVE_FROM_SUB_PATH: true
+    expose:
+      - 3000
+    volumes:
+      - ./grafana/:/etc/grafana/provisioning/

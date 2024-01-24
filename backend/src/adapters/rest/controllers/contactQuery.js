@@ -1,14 +1,37 @@
+import ErrorController from './errorController.js';
+
 const ContactQueryController = ({ logger, appQuery }) => {
     return {
-        getContactById(req, res, next) {
+        async getContactById(req, res, next) {
+            const getContact = appQuery.GetContact();
             res.setHeader('Content-Type', 'application/json');
-            res.status(200).json("{ 'hello':'get by id' }");
-            logger.debug(req.params);
+            try {
+                const contact = await getContact.getContactById(req.params.id);
+                res.status(200).json(contact);
+            } catch (err) {
+                const errController = ErrorController();
+                const sError = errController.genErrorStruct(err);
+                res.status(sError.code).json(sError);
+            }
         },
-        getContactByParams(req, res, next) {
+        async getContactByParams(req, res, next) {
+            const getContact = appQuery.GetContact();
             res.setHeader('Content-Type', 'application/json');
-            res.status(200).json("{ 'hello':'world params' }");
-            logger.debug(req.query);
+            try {
+                const { name, address, phone, mobilePhone, email } = req.query;
+                const contact = await getContact.findContact({
+                    name: name,
+                    address: address,
+                    phone: phone,
+                    mobilePhone: mobilePhone,
+                    email: email,
+                });
+                res.status(200).json(contact);
+            } catch (err) {
+                const errController = ErrorController();
+                const sError = errController.genErrorStruct(err);
+                res.status(sError.code).json(sError);
+            }
         },
     };
 };

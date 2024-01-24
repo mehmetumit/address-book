@@ -1,4 +1,3 @@
-import ContactIdModel from '../models/contactIdModel.js';
 import ErrorController from './errorController.js';
 const ContactCommandController = ({ logger, appCommand }) => {
     return {
@@ -6,10 +5,8 @@ const ContactCommandController = ({ logger, appCommand }) => {
             const createContact = appCommand.CreateContact();
             res.setHeader('Content-Type', 'application/json');
             try {
-                const contactId = await createContact.createNewContact(
-                    req.body
-                );
-                res.status(201).json(ContactIdModel(contactId));
+                const id = await createContact.createNewContact(req.body);
+                res.status(201).json(id);
             } catch (err) {
                 const errController = ErrorController();
                 const sError = errController.genErrorStruct(err);
@@ -19,9 +16,16 @@ const ContactCommandController = ({ logger, appCommand }) => {
         async updateContactById(req, res, next) {
             const updateContact = appCommand.UpdateContact();
             try {
+                const { name, address, phone, mobilePhone, email } = req.body;
                 await updateContact.updateContactById({
                     id: req.params.id,
-                    contactData: req.body,
+                    contactData: {
+                        name: name,
+                        address: address,
+                        phone: phone,
+                        mobilePhone: mobilePhone,
+                        email: email,
+                    },
                 });
                 res.status(204);
             } catch (err) {

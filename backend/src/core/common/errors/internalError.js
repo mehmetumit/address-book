@@ -1,8 +1,12 @@
 import BaseApplicationError from './appError.js';
 
-class InternalError extends BaseApplicationError {
+export class InternalError extends BaseApplicationError {
     constructor(message) {
         super(message || 'Internal error');
     }
 }
-export default InternalError;
+export class DatabaseError extends BaseApplicationError {
+    constructor(message) {
+        super(message || 'Database unavailable');
+    }
+}

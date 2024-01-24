@@ -1,5 +1,10 @@
 import BaseApplicationError from './appError.js';
 
+export class ContactNotFound extends BaseApplicationError{
+    constructor(message) {
+        super(message || 'Contact not found');
+    }
+}
 export class NameExistsError extends BaseApplicationError {
     constructor(message) {
         super(message || 'Contact name exists');

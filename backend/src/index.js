@@ -6,6 +6,7 @@ import SwaggerConfig from './configs/swaggerConfig.js';
 import CreateContact from './core/app/command/createContact.js';
 import DeleteContact from './core/app/command/deleteContact.js';
 import UpdateContact from './core/app/command/updateContact.js';
+import GetContact from './core/app/query/getContact.js';
 
 // Composition root of application
 
@@ -25,7 +26,12 @@ logger.initLogger({
 const server = Server({
     serverConfig: ServerConfig,
     logger: logger,
-    appQuery: {}, //TODO
+    appQuery: {
+        GetContact: GetContact({
+            logger: logger,
+            contactRepo: undefined,
+        }),
+    }, //TODO
     appCommand: {
         CreateContact: CreateContact({
             logger: logger,

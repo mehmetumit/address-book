@@ -3,7 +3,7 @@ import ErrorController from './errorController.js';
 const ContactQueryController = ({ logger, appQuery }) => {
     return {
         async getContactById(req, res, next) {
-            const getContact = appQuery.GetContact();
+            const getContact = appQuery.GetContact;
             res.setHeader('Content-Type', 'application/json');
             try {
                 const contact = await getContact.getContactById(req.params.id);
@@ -15,7 +15,7 @@ const ContactQueryController = ({ logger, appQuery }) => {
             }
         },
         async getContactByParams(req, res, next) {
-            const getContact = appQuery.GetContact();
+            const getContact = appQuery.GetContact;
             res.setHeader('Content-Type', 'application/json');
             try {
                 const { name, address, phone, mobilePhone, email } = req.query;

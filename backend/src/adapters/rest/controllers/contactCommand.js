@@ -2,7 +2,7 @@ import ErrorController from './errorController.js';
 const ContactCommandController = ({ logger, appCommand }) => {
     return {
         async createContact(req, res, next) {
-            const createContact = appCommand.CreateContact();
+            const createContact = appCommand.CreateContact;
             res.setHeader('Content-Type', 'application/json');
             try {
                 const id = await createContact.createNewContact(req.body);
@@ -14,7 +14,7 @@ const ContactCommandController = ({ logger, appCommand }) => {
             }
         },
         async updateContactById(req, res, next) {
-            const updateContact = appCommand.UpdateContact();
+            const updateContact = appCommand.UpdateContact;
             try {
                 const { name, address, phone, mobilePhone, email } = req.body;
                 await updateContact.updateContactById({
@@ -36,7 +36,7 @@ const ContactCommandController = ({ logger, appCommand }) => {
             }
         },
         async deleteContactById(req, res, next) {
-            const deleteContact = appCommand.DeleteContact();
+            const deleteContact = appCommand.DeleteContact;
             try {
                 await deleteContact.deleteContactById(req.params.id);
 

@@ -5,7 +5,14 @@ const ContactCommandController = ({ logger, appCommand }) => {
             const createContact = appCommand.CreateContact;
             res.setHeader('Content-Type', 'application/json');
             try {
-                const id = await createContact.createNewContact(req.body);
+                const { name, address, phone, mobilePhone, email } = req.body;
+                const id = await createContact.createNewContact({
+                    name: name,
+                    address: address,
+                    phone: phone,
+                    mobilePhone: mobilePhone,
+                    email: email,
+                });
                 res.status(201).json(id);
             } catch (err) {
                 const errController = ErrorController();

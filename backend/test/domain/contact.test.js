@@ -111,6 +111,19 @@ describe('Contact validation test', () => {
             });
         }).throw(InvalidPhoneError);
     });
+    it('phone includes non number character, should throw invalid phone', () => {
+        expect(() => {
+            Contact({
+                name: faker.person.fullName(),
+                email: faker.internet.email(),
+                phone: `+${faker.string.numeric({ length: { min: 10, max: 10 } })}`,
+                address: `${faker.location.streetAddress()} ${faker.location.city()}`,
+                mobilePhone: faker.string.numeric({
+                    length: { min: 1, max: 15 },
+                }),
+            });
+        }).throw(InvalidPhoneError);
+    });
     it('phone has more than 15 characters, should throw invalid phone', () => {
         expect(() => {
             Contact({
@@ -173,6 +186,19 @@ describe('Contact validation test', () => {
                 address: `${faker.location.streetAddress()} ${faker.location.city()}`,
             });
         }).not.throw();
+    });
+    it('mobile phone includes non number character, should throw invalid phone', () => {
+        expect(() => {
+            Contact({
+                name: faker.person.fullName(),
+                email: faker.internet.email(),
+                phone: faker.string.numeric({
+                    length: { min: 1, max: 15 },
+                }),
+                address: `${faker.location.streetAddress()} ${faker.location.city()}`,
+                mobilePhone: `+${faker.string.numeric({ length: { min: 10, max: 10 } })}`,
+            });
+        }).throw(InvalidPhoneError);
     });
     it('mobile phone has more than 15 characters, should throw invalid mobile phone', () => {
         expect(() => {

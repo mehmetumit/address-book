@@ -31,7 +31,7 @@ const server = Server({
             logger: logger,
             contactRepo: undefined,
         }),
-    }, //TODO
+    },
     appCommand: {
         CreateContact: CreateContact({
             logger: logger,

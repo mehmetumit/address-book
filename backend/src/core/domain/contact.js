@@ -7,6 +7,7 @@ import {
     InvalidAddress,
 } from '../common/errors/contactError.js';
 
+// obj = state + behaviour
 //Name, address, phone required
 const joiSchema = Joi.object({
     name: Joi.string().min(1).max(50).required().error(new InvalidNameError()),
@@ -17,12 +18,14 @@ const joiSchema = Joi.object({
         .error(new InvalidAddress()),
     //Phone data of contact Length must be between 1 and 15 digits according to E.164
     phone: Joi.string()
+        .regex(/^\d+$/)//Phone number must not include +
         .min(1)
         .max(15)
         .required()
         .error(new InvalidPhoneError()),
     email: Joi.string().email().error(new InvalidEmailError()),
     mobilePhone: Joi.string()
+        .regex(/^\d+$/)//Mobile phone number must not include +
         .min(1)
         .max(15)
         .error(new InvalidMobilePhoneError()),

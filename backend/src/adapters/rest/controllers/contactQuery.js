@@ -14,17 +14,12 @@ const ContactQueryController = ({ logger, appQuery }) => {
                 res.status(sError.code).json(sError);
             }
         },
-        async getContactByParams(req, res, next) {
+        async getContactsByParams(req, res, next) {
             const getContact = appQuery.GetContact;
             res.setHeader('Content-Type', 'application/json');
             try {
-                const { name, address, phone, mobilePhone, email } = req.query;
-                const contact = await getContact.findContact({
-                    name: name,
-                    address: address,
-                    phone: phone,
-                    mobilePhone: mobilePhone,
-                    email: email,
+                const contact = await getContact.findContacts({
+                    ...req.query, // Filter out undefined fields
                 });
                 res.status(200).json(contact);
             } catch (err) {

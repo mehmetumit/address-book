@@ -23,18 +23,13 @@ const ContactCommandController = ({ logger, appCommand }) => {
         async updateContactById(req, res, next) {
             const updateContact = appCommand.UpdateContact;
             try {
-                const { name, address, phone, mobilePhone, email } = req.body;
                 await updateContact.updateContactById({
                     id: req.params.id,
                     contactData: {
-                        name: name,
-                        address: address,
-                        phone: phone,
-                        mobilePhone: mobilePhone,
-                        email: email,
+                        ...req.body,// Filter out undefined fields
                     },
                 });
-                res.status(204);
+                res.status(204).send();
             } catch (err) {
                 res.setHeader('Content-Type', 'application/json');
                 const errController = ErrorController();
@@ -47,7 +42,7 @@ const ContactCommandController = ({ logger, appCommand }) => {
             try {
                 await deleteContact.deleteContactById(req.params.id);
 
-                res.status(204);
+                res.status(204).send();
             } catch (err) {
                 res.setHeader('Content-Type', 'application/json');
                 const errController = ErrorController();

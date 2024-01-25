@@ -8,7 +8,6 @@ import { ContactModel } from './models/contactModel.js';
 const ContactRepository = ({ logger, dbConfig }) => {
     let connection;
     const throwErrIfNotConnected = () => {
-        logger.info(mongoose.connection.readyState);
         // 0: disconnected
         // 1: connected
         // 2: connecting
@@ -49,9 +48,36 @@ const ContactRepository = ({ logger, dbConfig }) => {
         },
         async findAll(queryData) {
             throwErrIfNotConnected();
-            logger.debug(queryData);
+            let dbQuery = {};
+            if (queryData?.name !== undefined) {
+                dbQuery.name = { $regex: `.*${queryData.name}.*`, $options: 'i' };
+            }
+            if (queryData?.address !== undefined) {
+                dbQuery.address = {
+                    $regex: `.*${queryData.address}.*`,
+                    $options: 'i',
+                };
+            }
+            if (queryData?.phone !== undefined) {
+                dbQuery.phone = {
+                    $regex: `.*${queryData.phone}.*`,
+                    $options: 'i',
+                };
+            }
+            if (queryData?.email !== undefined) {
+                dbQuery.email = {
+                    $regex: `.*${queryData.email}.*`,
+                    $options: 'i',
+                };
+            }
+            if (queryData?.mobilePhone !== undefined) {
+                dbQuery.mobilePhone = {
+                    $regex: `.*${queryData.mobilePhone}.*`,
+                    $options: 'i',
+                };
+            }
 
-            return await ContactModel.find(queryData);
+            return await ContactModel.find(dbQuery);
         },
         async getById(id) {
             throwErrIfNotConnected();

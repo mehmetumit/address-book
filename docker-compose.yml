@@ -5,7 +5,7 @@ services:
     container_name: address-book-backend
     environment:
       NODE_ENV: production
-    expose:
+    expose: # Don't forward port to outside of docker network
       - 3000
   address-book-frontend:
     image: app/address-book-frontend
@@ -24,7 +24,7 @@ services:
     image: prom/prometheus
     hostname: prometheus-collector
     container_name: prometheus-collector
-    expose:
+    expose: # Don't forward port to outside of docker network
       - 9090
     volumes:
       - ./prometheus/prometheus.yml:/prometheus/prometheus.yml
@@ -37,13 +37,27 @@ services:
     hostname: grafana
     container_name: grafana
     environment:
+      # Authentication disabled for now
       GF_AUTH_DISABLE_LOGIN_FORM: true
       GF_AUTH_ANONYMOUS_ENABLED: true
       GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
       # We need to set sub path if we use it behind a proxy
       GF_SERVER_ROOT_URL: '%(protocol)s://%(domain)s:%(http_port)s/grafana'
       GF_SERVE_FROM_SUB_PATH: true
-    expose:
+    expose: # Don't forward port to outside of docker network
       - 3000
     volumes:
       - ./grafana/:/etc/grafana/provisioning/
+  db:
+    image: mongo:5.0
+    hostname: db
+    container_name: db
+    environment:
+      TZ: "Europe/Istanbul"
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
+    expose: # Don't forward port to outside of docker network
+      - 27017
+    volumes: # Make database persistence
+      - ./db/data:/data/db

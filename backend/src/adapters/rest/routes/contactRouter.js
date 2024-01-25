@@ -13,10 +13,10 @@ const ContactRouter = ({ logger, appCommand, appQuery }) => {
     });
     router
         .route('/')
-        .get(queryController.getContactByParams)
+        .get(queryController.getContactsByParams)
         .post(commandController.createContact);
     router
-        .route('/:contact_id')
+        .route('/:id')
         .get(queryController.getContactById)
         .delete(commandController.deleteContactById)
         .put(commandController.updateContactById);

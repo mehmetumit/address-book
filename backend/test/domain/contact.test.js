@@ -198,7 +198,7 @@ describe('Contact validation test', () => {
                 address: `${faker.location.streetAddress()} ${faker.location.city()}`,
                 mobilePhone: `+${faker.string.numeric({ length: { min: 10, max: 10 } })}`,
             });
-        }).throw(InvalidPhoneError);
+        }).throw(InvalidMobilePhoneError);
     });
     it('mobile phone has more than 15 characters, should throw invalid mobile phone', () => {
         expect(() => {

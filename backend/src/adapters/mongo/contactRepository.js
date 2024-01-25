@@ -125,7 +125,7 @@ const ContactRepository = ({ logger, dbConfig }) => {
         },
         async delete(id) {
             throwErrIfNotConnected();
-            const isDeleted = await ContactModel.findOneAndDelete(id);
+            const isDeleted = await ContactModel.findByIdAndDelete(id);
             if (!isDeleted) throw new ContactNotFound();
         },
     };

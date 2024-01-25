@@ -9,7 +9,9 @@
     "init-env": "./scripts/init_env.sh",
     "test": "export NODE_ENV=test && mocha --recursive --exit",
     "test:coverage": "c8 --reporter=text --reporter=lcov npm run test",
-    "lint": "eslint . "
+    "lint": "eslint . ",
+    "seed:up" : "export NODE_ENV=development && node ./src/adapters/mongo/seederUp.js",
+    "seed:down" : "export NODE_ENV=development && node ./src/adapters/mongo/seederDown.js"
   },
   "repository": {
     "type": "git",

@@ -237,7 +237,7 @@ components:
       type: string
       minLength: 1
       maxLength: 255
-      example: Ankara, Turkey
+      example: Toronto, Canada
     Contact:
       description: |-
         Contact data model that contains contact information

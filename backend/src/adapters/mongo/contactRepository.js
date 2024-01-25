@@ -50,7 +50,10 @@ const ContactRepository = ({ logger, dbConfig }) => {
             throwErrIfNotConnected();
             let dbQuery = {};
             if (queryData?.name !== undefined) {
-                dbQuery.name = { $regex: `.*${queryData.name}.*`, $options: 'i' };
+                dbQuery.name = {
+                    $regex: `.*${queryData.name}.*`,
+                    $options: 'i',
+                };
             }
             if (queryData?.address !== undefined) {
                 dbQuery.address = {
@@ -87,12 +90,24 @@ const ContactRepository = ({ logger, dbConfig }) => {
         },
         async updateById({ id, contactData }) {
             throwErrIfNotConnected();
-            const contact = await ContactModel.findByIdAndUpdate(
-                id,
-                contactData
-            );
-            if (!contact) throw new ContactNotFound();
-            logger.debug('Updated contact:', contact);
+            try {
+                const contact = await ContactModel.findByIdAndUpdate(
+                    id,
+                    contactData
+                );
+                if (!contact) throw new ContactNotFound();
+                logger.debug({
+                    UpdatedContact: contact,
+                });
+            } catch (err) {
+                // Handle unique name error
+                // Error code 11000 means duplicate in mogodb
+                logger.error(err);
+                if (err?.code === 11000) {
+                    throw new NameExistsError();
+                }
+                throw err;
+            }
         },
         async create(contactData) {
             throwErrIfNotConnected();
@@ -101,7 +116,7 @@ const ContactRepository = ({ logger, dbConfig }) => {
             } catch (err) {
                 // Handle unique name error
                 // Error code 11000 means duplicate in mogodb
-                logger.debug(err);
+                logger.error(err);
                 if (err?.code === 11000) {
                     throw new NameExistsError();
                 }

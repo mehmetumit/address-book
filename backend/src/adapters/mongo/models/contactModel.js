@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 //Validations handled in core domain
 //Just need to make sure name is unique
 const contactSchema = new mongoose.Schema({
+    // Use uuidv4 isntead of mongo objects in id
+    // Make compatible with other environments
     _id: {type: String, default: uuidv4},
     name: {
         type: String,

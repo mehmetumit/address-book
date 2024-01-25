@@ -10,6 +10,7 @@ import GetContact from './core/app/query/getContact.js';
 import mongoose from 'mongoose';
 import MongoConfig from './configs/mongoConfig.js';
 import ContactRepository from './adapters/mongo/contactRepository.js';
+import SignalHandler from './util/signalHandler.js';
 
 // Composition root of application
 
@@ -26,15 +27,10 @@ logger.initLogger({
             : logger.debugLevel(),
 });
 
-mongoose
-    .connect(MongoConfig.dbUrl)
-    .then(() => {
-        logger.info('Database connection established');
-    })
-    .catch((err) => {
-        logger.error(err);
-    });
-const contactRepo = ContactRepository(logger)
+const contactRepo = ContactRepository({
+    logger: logger,
+    dbConfig: MongoConfig,
+});
 const server = Server({
     serverConfig: ServerConfig,
     logger: logger,
@@ -59,9 +55,19 @@ const server = Server({
         }),
     },
 });
+contactRepo.conntectToDb();
 server
     .withCors()
     .withProm(PromConfig)
     .withLoggerMiddleware()
     .withSwaggerUI(SwaggerConfig)
     .serve();
+
+SignalHandler({
+    logger: logger,
+    timeoutSecond: ServerConfig.shutdownTimeout,
+    shutdownCallbacks: [server.shutDown, contactRepo.shutdown],
+})
+    .listenINT()
+    .listenQUIT()
+    .listenTERM();

@@ -1,12 +1,16 @@
 import process from 'process';
-const SignalHandler = ({ logger, timeoutSecond, shutdownCallback }) => {
-    const sigListener = (signal) => {
-        logger.info(`SIGNAL: ${signal} Received terminate, graceful gracefully shutting down...`);
+const SignalHandler = ({ logger, timeoutSecond, shutdownCallbacks }) => {
+    const sigListener = async(signal) => {
+        logger.info(
+            `Received ${signal}, gracefully shutting down...`
+        );
         setTimeout(() => {
-            logger.error('Graceful shutdown failed, forcefully shutting down')
+            logger.error('Graceful shutdown failed, forcefully shutting down');
             process.exit(1);
         }, timeoutSecond * 1000);
-        shutdownCallback();
+        for (const callback of shutdownCallbacks) {
+            await callback();
+        }
         process.exit(0);
     };
     return {

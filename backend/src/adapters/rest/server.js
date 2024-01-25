@@ -3,7 +3,6 @@ import YamlParser from '../../util/yamlParser.js';
 import SwaggerMiddleware from './middlewares/swaggerMiddleware.js';
 import PromMiddleware from './middlewares/promMiddleware.js';
 import LoggerMiddleware from './middlewares/loggerMiddleware.js';
-import SignalHandler from '../../util/signalHandler.js';
 import HelpRouter from './routes/helpRouter.js';
 import cors from 'cors';
 import ContactRouter from './routes/contactRouter.js';
@@ -12,7 +11,6 @@ const Server = ({ serverConfig, logger, appCommand, appQuery }) => {
     const app = express();
     const router = express.Router();
     const port = serverConfig.port;
-    const shutdownTimeout = serverConfig.shutdownTimout;
     let server;
     return {
         // Recommended to use on top of middleware chain
@@ -56,17 +54,9 @@ const Server = ({ serverConfig, logger, appCommand, appQuery }) => {
             server = app.listen(port, () => {
                 logger.info(`Listening on port ${port}`);
             });
-            SignalHandler({
-                logger: logger,
-                timeoutSecond: shutdownTimeout,
-                shutdownCallback: this.shutDown,
-            })
-                .listenINT()
-                .listenQUIT()
-                .listenTERM();
         },
-        shutDown() {
-            server.close();
+        async shutDown() {
+            await server.close();
             logger.info('Server shutdown successfully');
         },
     };

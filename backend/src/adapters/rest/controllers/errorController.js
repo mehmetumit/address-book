@@ -30,7 +30,7 @@ const ErrorController = () => {
             case err instanceof InternalError:
                 return 500;
             default:
-                return 500;
+                return 400;
         }
     };
     return {

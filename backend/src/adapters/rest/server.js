@@ -6,6 +6,7 @@ import LoggerMiddleware from './middlewares/loggerMiddleware.js';
 import HelpRouter from './routes/helpRouter.js';
 import cors from 'cors';
 import ContactRouter from './routes/contactRouter.js';
+import bodyParserErrorHandler from 'express-body-parser-error-handler';
 
 const Server = ({ serverConfig, logger, appCommand, appQuery }) => {
     const app = express();
@@ -41,6 +42,14 @@ const Server = ({ serverConfig, logger, appCommand, appQuery }) => {
         },
         serve() {
             app.use(express.json());
+            app.use(
+                bodyParserErrorHandler({
+                    onError: (err, req, res) => {},
+                    errorMessage: (err) => {
+                        return err.message;
+                    },
+                })
+            );
             app.use('/api/v1', router);
             router.use('/', HelpRouter());
             router.use(

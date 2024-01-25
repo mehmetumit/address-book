@@ -18,14 +18,14 @@ const joiSchema = Joi.object({
         .error(new InvalidAddress()),
     //Phone data of contact Length must be between 1 and 15 digits according to E.164
     phone: Joi.string()
-        .regex(/^\d+$/)//Phone number must not include +
+        .regex(/^\d+$/) //Phone number must not include +
         .min(1)
         .max(15)
         .required()
         .error(new InvalidPhoneError()),
     email: Joi.string().email().error(new InvalidEmailError()),
     mobilePhone: Joi.string()
-        .regex(/^\d+$/)//Mobile phone number must not include +
+        .regex(/^\d+$/) //Mobile phone number must not include +
         .min(1)
         .max(15)
         .error(new InvalidMobilePhoneError()),
@@ -62,6 +62,15 @@ const Contact = ({ name, address, phone, mobilePhone, email }) => {
         },
         getEmail() {
             return contactEmail;
+        },
+        serialize() {
+            return {
+                name: contactName,
+                address: contactAddress,
+                phone: contactPhone,
+                mobilePhone: contactMobilePhone,
+                email: contactEmail,
+            };
         },
     };
 };

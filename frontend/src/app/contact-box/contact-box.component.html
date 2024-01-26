@@ -11,7 +11,7 @@
         <div class="flex flex-col justify-start">
             <p class="text-2xl font-bold">Name:</p>
             <p
-                class="text-black font-medium  text-base justify-items-start text-start"
+                class="text-black font-medium text-base justify-items-start text-start"
             >
                 {{ contact.name }}
             </p>
@@ -19,7 +19,7 @@
         <div>
             <p class="text-2xl font-bold">Phone:</p>
             <p
-                class="text-black font-medium  text-base justify-items-start text-start"
+                class="text-black font-medium text-base justify-items-start text-start"
             >
                 {{ contact.phone }}
             </p>
@@ -27,7 +27,7 @@
         <div>
             <p class="text-2xl font-bold">MobilePhone:</p>
             <p
-                class="text-black font-medium  text-base justify-items-start text-start"
+                class="text-black font-medium text-base justify-items-start text-start"
             >
                 {{ contact.mobilePhone }}
             </p>
@@ -35,7 +35,7 @@
         <div>
             <p class="text-2xl font-bold">Address:</p>
             <p
-                class="text-black font-medium  text-base justify-items-start text-start"
+                class="text-black font-medium text-base justify-items-start text-start"
             >
                 {{ contact.address }}
             </p>
@@ -48,10 +48,19 @@
                 {{ contact.email }}
             </p>
         </div>
-        <div
-            class="flex flex-col justify-center items-center font medium text-white bg-red-500 rounded-xl w-28 h-12 mr-5"
-        >
-            <button>Delete</button>
+        <div class="flex flex justify-between mt-3">
+            <button
+                (click)="deleteContact(contact.id)"
+                class="font medium text-white bg-red-500 hover:bg-red-600 rounded-xl w-28 h-12 mr-5"
+            >
+                Delete
+            </button>
+            <button
+                (click)="updateContact(contact)"
+                class="font medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl w-28 h-12 mr-5"
+            >
+                Update
+            </button>
         </div>
     </div>
 </div>

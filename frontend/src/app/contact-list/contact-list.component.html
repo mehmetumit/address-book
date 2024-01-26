@@ -1,10 +1,7 @@
 <div
     class="bg-neutral-100 flex flex-wrap justify-center items-center mt-5 p-5 "
 >
-    @for (contact of data; track contact['id']) {
-        <app-contact-box [contact]="contact" class="m-5"></app-contact-box>
+    @for (contact of contacts; track contact['id']) {
+        <app-contact-box [contact]="contact" class="m-5" (delete)="deleteContact($event)"></app-contact-box>
     }
-        <app-contact-box class="m-5" ></app-contact-box>
-        <app-contact-box class="m-5" ></app-contact-box>
-        <app-contact-box class="m-5" ></app-contact-box>
 </div>

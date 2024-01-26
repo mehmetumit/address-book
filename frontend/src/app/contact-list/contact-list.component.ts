@@ -1,24 +1,27 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ContactBoxComponent } from '../contact-box/contact-box.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { Contact } from '../models/contact';
+import { ContactService } from '../services/contact.service';
 
 @Component({
     selector: 'app-contact-list',
     standalone: true,
-    imports: [ContactBoxComponent, HttpClientModule],
+    imports: [ContactBoxComponent],
     templateUrl: './contact-list.component.html',
     styleUrl: './contact-list.component.css',
 })
 export class ContactListComponent implements OnInit {
-    httpClient = inject(HttpClient);
-    data: [] = [];
+    contacts: Contact[] = [];
+    contactService = inject(ContactService);
     ngOnInit(): void {
-      this.fetchData()
+        this.contactService.findContacts({}).subscribe((data: any) => {
+            this.contacts = data;
+        });
     }
-    fetchData() {
-        this.httpClient.get(environment.api.url + '/contacts').subscribe((data: any) => {
-            this.data = data;
+    deleteContact(id: string) {
+        this.contactService.deleteContactById(id).subscribe(() => {
+            this.contacts = this.contacts.filter((el) => el.id !== id);
+            console.log('Delete');
         });
     }
 }

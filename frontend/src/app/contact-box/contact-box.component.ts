@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact } from '../models/contact';
 
 @Component({
@@ -17,5 +17,14 @@ export class ContactBoxComponent {
         email: 'tcook@apple.com',
         mobilePhone: '14089740100',
     };
+    @Output() delete: EventEmitter<string> = new EventEmitter();
+    @Output() update: EventEmitter<Contact> = new EventEmitter();
+    deleteContact(id: string) {
+        console.log(id);
+        this.delete.emit(id);
+    }
+    updateContact(contact: Contact) {
+        console.log('Update contact');
+    }
     constructor() {}
 }

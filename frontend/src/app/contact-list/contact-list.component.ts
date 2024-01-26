@@ -15,13 +15,16 @@ export class ContactListComponent implements OnInit {
     contactService = inject(ContactService);
     ngOnInit(): void {
         this.contactService.findContacts({}).subscribe((data: any) => {
-            this.contacts = data;
+            this.loadContacts(data);
         });
+    }
+    loadContacts(contacts: Contact[]) {
+        this.contacts = contacts;
     }
 
     deleteContact(id: string) {
         this.contactService.deleteContactById(id).subscribe(() => {
-            this.contacts = this.contacts.filter((el) => el.id !== id);
+            this.loadContacts(this.contacts.filter((el) => el.id !== id));
             console.log('Delete');
         });
     }

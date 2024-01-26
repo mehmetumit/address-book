@@ -1,5 +1,6 @@
 name: Build, test, and deploy the frontend
 on:
+  workflow_dispatch:
   push:
     branches:
       - "main"
@@ -8,6 +9,9 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
@@ -21,6 +25,7 @@ jobs:
       - name: Test
         run: echo 'TODO'
   docker-build-push:
+    needs: build-test
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
@@ -35,9 +40,11 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
+          context: "{{defaultContext}}:frontend"
           push: true
           tags: mehmetumit1/address-book-frontend:latest
   deploy:
+    needs: docker-build-push
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -50,7 +57,8 @@ jobs:
           # Add key to the agent
           ssh-add - <<< "${{ secrets.SSH_KEY }}"
           # Add host to known hosts
-          ssh-keyscan -H ${{secrets.HOST}} > ~/.ssh/known_hosts
+          # Make sure directory exists
+          mkdir -p ~/.ssh && ssh-keyscan -H "${{secrets.SV_HOST}}" >> ~/.ssh/known_hosts
       - name: Deploy
         env:
           SV_USER: ${{ secrets.SV_USER }}

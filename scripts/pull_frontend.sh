@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ -d "~/address-book" ]; then
+if [ -d "$HOME/address-book" ]; then
 	cd ~/address-book;
 	# Pull new image from registry
 	docker-compose pull address-book-frontend;

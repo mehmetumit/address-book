@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ -d "~/address-book" ]; then
+if [ -d "$HOME/address-book" ]; then
 	printf 'App folder exists! Seems like compose already initialized!\n'
 	exit 1
 else

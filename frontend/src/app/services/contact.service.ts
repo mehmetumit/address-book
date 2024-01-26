@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ContactQuery } from '../models/contact.query';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root',

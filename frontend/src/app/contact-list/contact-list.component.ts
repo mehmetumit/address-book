@@ -2,11 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ContactBoxComponent } from '../contact-box/contact-box.component';
 import { Contact } from '../models/contact';
 import { ContactService } from '../services/contact.service';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-contact-list',
     standalone: true,
-    imports: [ContactBoxComponent],
+    imports: [ContactBoxComponent, RouterOutlet, RouterLink, RouterLinkActive, ],
     templateUrl: './contact-list.component.html',
     styleUrl: './contact-list.component.css',
 })

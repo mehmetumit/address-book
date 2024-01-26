@@ -1,0 +1,67 @@
+<div class="flex flex-wrap justify-center items-center mt-5 p-5">
+    <div
+        class="bg-neutral-300 flex justify-between items-center p-3 rounded-xl"
+    >
+        <div class="flex flex-col justify-center">
+            <div class="flex flex-col justify-start">
+                <p class="text-2xl font-bold">Name:</p>
+                <input
+                    type="text"
+                    class="bg-neutral-100 text-neutral-800 rounded-lg p-3 m-3 ml-0 w-full text-2xl"
+                    placeholder="Name"
+                    [formControl]="contactForm.name"
+                />
+            </div>
+            <div>
+                <p class="text-2xl font-bold">Phone:</p>
+                <input
+                    type="text"
+                    class="bg-neutral-100 text-neutral-800 rounded-lg p-3 m-3 ml-0 w-full text-2xl"
+                    placeholder="Phone"
+                    [formControl]="contactForm.phone"
+                />
+            </div>
+            <div>
+                <p class="text-2xl font-bold">MobilePhone:</p>
+                <input
+                    type="text"
+                    class="bg-neutral-100 text-neutral-800 rounded-lg p-3 m-3 ml-0 w-full text-2xl"
+                    placeholder="Mobile phone"
+                    [formControl]="contactForm.mobilePhone"
+                />
+            </div>
+            <div>
+                <p class="text-2xl font-bold">Address:</p>
+                <input
+                    type="text"
+                    class="bg-neutral-100 text-neutral-800 rounded-lg p-3 m-3 ml-0 w-full text-2xl"
+                    placeholder="Address"
+                    [formControl]="contactForm.address"
+                />
+            </div>
+            <div>
+                <p class="text-2xl font-bold">Email:</p>
+                <input
+                    type="text"
+                    class="bg-neutral-100 text-neutral-800 rounded-lg p-3 m-3 ml-0 w-full text-2xl"
+                    placeholder="Email"
+                    [formControl]="contactForm.email"
+                />
+            </div>
+            <div class="flex flex justify-center items-center mt-3">
+                <button
+                    (click)="newContact()"
+                    class="font-medium text-white bg-green-500 hover:bg-green-600 rounded-xl w-28 h-12 mr-5"
+                >
+                    Create
+                </button>
+                <button
+                    routerLink="/"
+                    class="font-medium text-white bg-red-500 hover:bg-red-600 rounded-xl w-28 h-12 mr-5"
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

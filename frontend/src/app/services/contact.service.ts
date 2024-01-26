@@ -27,6 +27,7 @@ export class ContactService {
         });
     }
     createContact(contactData: ContactQuery) {
+        console.log({...contactData});
         return this.http.post(environment.api.url + '/contacts', {
             ...contactData,
         });

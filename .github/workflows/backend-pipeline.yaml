@@ -54,7 +54,7 @@ jobs:
           # Add key to the agent
           ssh-add - <<< "${{ secrets.SSH_KEY }}"
           # Add host to known hosts
-          ssh-keyscan -H ${{secrets.HOST}} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{secrets.HOST}} > ~/.ssh/known_hosts
       - name: Initialize production environment variables
         run: |
           echo "${{ secrets.BACKEND_ENV }}" > ./backend/.env.prod

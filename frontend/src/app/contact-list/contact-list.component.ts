@@ -3,11 +3,12 @@ import { ContactBoxComponent } from '../contact-box/contact-box.component';
 import { Contact } from '../models/contact';
 import { ContactService } from '../services/contact.service';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ContactSearchComponent } from '../contact-search/contact-search.component';
 
 @Component({
     selector: 'app-contact-list',
     standalone: true,
-    imports: [ContactBoxComponent, RouterOutlet, RouterLink, RouterLinkActive, ],
+    imports: [ContactBoxComponent, ContactSearchComponent ,RouterOutlet, RouterLink, RouterLinkActive, ],
     templateUrl: './contact-list.component.html',
     styleUrl: './contact-list.component.css',
 })

@@ -1,0 +1,30 @@
+name: Compose pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          # create temporary socket
+          ssh-agent -a "$SSH_AUTH_SOCK" > /dev/null
+          # Add key to the agent
+          ssh-add - <<< "${{ secrets.SSH_KEY }}"
+          # Add host to known hosts
+          ssh-keyscan -H ${{secrets.HOST}} >> ~/.ssh/known_hosts
+      - name: Initialize production environment variables
+        run: |
+          echo "${{ secrets.COMPOSE_ENV }}" > ./.env
+      - name: Deploy
+        env:
+          SV_USER: ${{ secrets.SV_USER }}
+          SV_HOST: ${{ secrets.SV_HOST }}
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ./scripts/deploy_compose.sh

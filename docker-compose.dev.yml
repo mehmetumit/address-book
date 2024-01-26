@@ -1,14 +1,21 @@
 services:
   address-book-backend:
     hostname: address-book-backend
-    image: app/address-book-backend
+    image: mehmetumit1/address-book-backend:latest
     container_name: address-book-backend
     environment:
       NODE_ENV: production
+      HTTP_PORT: 3000
+      SHUTDOWN_TIMEOUT: 10
+      DB_HOST: "db" # Db container hostname
+      DB_PORT: 27017
+      DB_USERNAME: demo-user
+      DB_PASSWORD: demo1234
+      DB_NAME: Demo
     expose: # Don't forward port to outside of docker network
       - 3000
   address-book-frontend:
-    image: app/address-book-frontend
+    image: mehmetumit1/address-book-frontend:latest
     container_name: address-book-frontend
   nginx:
     hostname: nginx

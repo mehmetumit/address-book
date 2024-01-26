@@ -1,0 +1,60 @@
+name: Build, test, and deploy the frontend
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "frontend"
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+      - name: Fetch Repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Test
+        run: echo 'TODO'
+  docker-build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: mehmetumit1/address-book-frontend:latest
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          # create temporary socket
+          ssh-agent -a "$SSH_AUTH_SOCK" > /dev/null
+          # Add key to the agent
+          ssh-add - <<< "${{ secrets.SSH_KEY }}"
+          # Add host to known hosts
+          ssh-keyscan -H ${{secrets.HOST}} >> ~/.ssh/known_hosts
+      - name: Deploy
+        env:
+          SV_USER: ${{ secrets.SV_USER }}
+          SV_HOST: ${{ secrets.SV_HOST }}
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ./scripts/deploy_frontend.sh

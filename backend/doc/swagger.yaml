@@ -6,14 +6,12 @@ info:
     Consider CORS restrictions when making requests to other hosts.
   version: 1.0.0
 servers:
+  - url: http://ec2-3-17-142-96.us-east-2.compute.amazonaws.com/api/v1
+    description: Production server
   - url: http://localhost:3000/api/v1
     description: Local development server
   - url: http://localhost/api/v1
     description: Local test server
-  - url: https://example.com/api/v1
-    description: Production server
-  - url: https://staging.example.com/api/v1
-    description: Staging server
 tags:
   - name: contacts
     description: Operations about contacts of user

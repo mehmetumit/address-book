@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ContactQuery } from '../models/contact.query';
 import { Contact } from '../models/contact';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -10,7 +10,14 @@ import { environment } from '../../environments/environment.development';
 export class ContactService {
     constructor(private http: HttpClient) {}
     findContacts(contactQuery: ContactQuery) {
-        return this.http.get(environment.api.url + '/contacts');
+        const httpParams = new HttpParams({
+            fromObject: {
+                ...contactQuery,
+            },
+        });
+        return this.http.get(environment.api.url + '/contacts', {
+            params: httpParams,
+        });
     }
     deleteContactById(id: string) {
         return this.http.delete(environment.api.url + '/contacts/' + id);

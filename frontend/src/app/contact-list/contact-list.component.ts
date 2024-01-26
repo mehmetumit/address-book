@@ -18,6 +18,7 @@ export class ContactListComponent implements OnInit {
             this.contacts = data;
         });
     }
+
     deleteContact(id: string) {
         this.contactService.deleteContactById(id).subscribe(() => {
             this.contacts = this.contacts.filter((el) => el.id !== id);

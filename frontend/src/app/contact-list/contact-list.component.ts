@@ -18,7 +18,6 @@ export class ContactListComponent implements OnInit {
     }
     fetchData() {
         this.httpClient.get(environment.api.url + '/contacts').subscribe((data: any) => {
-            console.log(data);
             this.data = data;
         });
     }

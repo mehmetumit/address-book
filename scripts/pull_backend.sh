@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ -d "$HOME/address-book" ]; then
-	cd ~/app;
+	cd ~/address-book;
 	# Pull new image from registry
 	docker-compose pull address-book-backend;
 else

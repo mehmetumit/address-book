@@ -10,8 +10,8 @@
     "test": "export NODE_ENV=test && mocha --recursive --exit",
     "test:coverage": "c8 --reporter=text --reporter=lcov npm run test",
     "lint": "eslint . ",
-    "seed:up" : "export NODE_ENV=development && node ./src/adapters/mongo/seederUp.js",
-    "seed:down" : "export NODE_ENV=development && node ./src/adapters/mongo/seederDown.js"
+    "seed:up": "export NODE_ENV=development && node ./src/adapters/mongo/seederUp.js",
+    "seed:down": "export NODE_ENV=development && node ./src/adapters/mongo/seederDown.js"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.3.1",
+    "c8": "^9.1.0",
     "chai": "^5.0.0",
     "chai-http": "^4.4.0",
     "eslint": "^8.56.0",

@@ -8,7 +8,7 @@
     "live-reload": "export NODE_ENV=development && nodemon ./src/index.js -e js,ejs,json,yaml,yml,css,html,jpg,png",
     "init-env": "./scripts/init_env.sh",
     "test": "export NODE_ENV=test && mocha --recursive --exit",
-    "test:coverage": "c8 --reporter=text --reporter=lcov npm run test",
+    "test:coverage": "c8 --reporter=text --reporter=lcov --all npm run test",
     "lint": "eslint . ",
     "seed:up": "export NODE_ENV=development && node ./src/adapters/mongo/seederUp.js",
     "seed:down": "export NODE_ENV=development && node ./src/adapters/mongo/seederDown.js"
